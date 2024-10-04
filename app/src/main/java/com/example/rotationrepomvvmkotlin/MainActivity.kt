@@ -23,6 +23,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.rotationrepomvvmkotlin.ui.theme.RotationRepoMVVMKotlinTheme
 
 class MainActivity : ComponentActivity() {
@@ -30,8 +31,9 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+            val  viewModel: CounterViewModel = viewModel()
             RotationRepoMVVMKotlinTheme {
-                TheCounterApp()
+                TheCounterApp(viewModel)
             }
         }
     }
@@ -39,32 +41,23 @@ class MainActivity : ComponentActivity() {
 
 
 @Composable
-fun TheCounterApp() {
-    val count = remember { mutableStateOf(0) }
-
-    fun increment() {
-        count.value++
-    }
-
-    fun decrement() {
-        count.value--
-    }
+fun TheCounterApp(viewModel: CounterViewModel) {
 
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(text = "Counter: ${count.value}",
+        Text(text = "Counter: ${viewModel.count.value}",
             fontSize = 24.sp,
             fontWeight = FontWeight.Bold
             )
         Row {
-            Button(onClick = {increment()}) {
+            Button(onClick = {viewModel.increment()}) {
                 Text(text = "Add +")
             }
             Spacer(modifier = Modifier.width(8.dp))
-            Button(onClick = {decrement()}) {
+            Button(onClick = {viewModel.decrement()}) {
                 Text(text = "Sub -")
             }
         }
